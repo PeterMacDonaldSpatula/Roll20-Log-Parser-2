@@ -1,9 +1,10 @@
 package app;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -81,9 +82,9 @@ public class UIController implements Initializable {
 	}
 	
 	@FXML
-	protected void startParser() {
+	protected void startParser() throws IOException {
 		boolean success = true;
-		
+		boolean madeTempCSS = false;
 		if (selectedFile == null || outputFile == null) {
 			return;
 		}
@@ -100,31 +101,38 @@ public class UIController implements Initializable {
 		String outputDir = "output/" + log.getTitle();
 		
 		if (cssFile == null) {
-			cssFile = new File("res/style.css");
+			InputStream cssData = this.getClass().getResourceAsStream("/app/res/style.css");
+			byte[] buffer = new byte[cssData.available()];
+			cssData.read(buffer);
+			
+			madeTempCSS = true;
+			
+			File targetCssFile = new File("style.css");
+			OutputStream outStream = new FileOutputStream(targetCssFile);
+			outStream.write(buffer);
+			outStream.close();
+			
+			cssFile = targetCssFile;
 		}
 		
 		HtmlGenerator generator = new HtmlGenerator();
 		try {
-			generator.generate(log, cssFile.getPath());
+			generator.generate(log, cssFile.getPath(), selectedFile);
 			generator.zip(outputFile, outputDir);
 			generator.deleteTempDir(outputDir);
+			if (madeTempCSS) {
+				File tempCSSFile = new File("style.css");
+				tempCSSFile.delete();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			success = false;
 		}
 		
-		FXMLLoader loader = new FXMLLoader();
-		FileInputStream file;
+		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/app/res/end 0.01.fxml"));
 		Parent root = null;
 		try {
-			file = new FileInputStream("res/end 0.01.fxml");
-		} catch (FileNotFoundException e) {
-			System.out.println("Failed to open resource file:");
-			e.printStackTrace();
-			return;
-		}
-		try {
-			root = loader.load(file);
+			root = loader.load();
 		} catch (IOException e) {
 			System.out.println("Failed to open end window:");
 			e.printStackTrace();
@@ -148,24 +156,15 @@ public class UIController implements Initializable {
 	
 	@FXML
 	protected void openAdvanced() {
-		FXMLLoader loader = new FXMLLoader();
-		FileInputStream file;
+		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/app/res/advanced options 0.01.fxml"));
 		Parent root = null;
 		try {
-			file = new FileInputStream("res/advanced options 0.01.fxml");
-		} catch (FileNotFoundException e) {
-			System.out.println("Failed to open resource file:");
-			e.printStackTrace();
-			return;
-		}
-		try {
-			root = loader.load(file);
+			root = loader.load();
 		} catch (IOException e) {
 			System.out.println("Failed to open options window:");
 			e.printStackTrace();
 			return;
 		}
-
 		
 		Stage optionsWindow = new Stage();
 		optionsWindow.initModality(Modality.WINDOW_MODAL);

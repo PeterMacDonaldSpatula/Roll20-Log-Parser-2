@@ -14,12 +14,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
 import parser.Log;
 import parser.Message;
-import parser.Parser;
 import parser.Session;
 
 public class HtmlGenerator {
@@ -126,7 +122,7 @@ public class HtmlGenerator {
 	}
 	
 	private String generateSession(Session session, String logTitle, String styleSheet, int sessionNum, boolean first, boolean last) {
-		String output = "<html>\n" + generateHeader(logTitle + " - " + session.getTitle(), styleSheet);
+		String output = "<html>\n" + generateHeader(logTitle + " - " + session.getTitle(), Paths.get(styleSheet).getFileName().toString());
 		output += generateBody(session.getMessages());
 		output += generateFooter(sessionNum, first, last);
 		output += "</html>";
@@ -141,7 +137,8 @@ public class HtmlGenerator {
 		return avatar.substring(0, avatar.indexOf('/'));
 	}
 	
-	private void moveImages(Log log) throws IOException {
+	private void moveImages(Log log, File selectedFile) throws IOException {
+		String parentPath = selectedFile.getParent();
 		List<Session> sessions = log.getSessions();
 		String path = null;
 		int sessionCount = 0, messageCount = 0;
@@ -171,8 +168,10 @@ public class HtmlGenerator {
 			}
 		}
 		
-		File folder = new File(path);
+		File folder = new File(parentPath + "/" + path);
+		System.out.println(path);
 		File[] files = folder.listFiles();
+		System.out.println(files);
 		
 		Files.createDirectories(Paths.get("output/" + log.getTitle() + "/res/img"));
 		
@@ -214,15 +213,15 @@ public class HtmlGenerator {
 		return "</body>\n</html>";
 	}
 	
-	public void generate(Log log, String styleSheet) throws IOException{
-		moveImages(log);
+	public void generate(Log log, String styleSheet, File selectedFile) throws IOException{
+		moveImages(log, selectedFile);
 		moveStyleSheet(log.getTitle(), styleSheet);
 		
 		List<Session> sessions = log.getSessions();
 		
 		int counter = 0;
 		
-		String toc = generateTocHeader(log.getTitle(), styleSheet);
+		String toc = generateTocHeader(log.getTitle(), Paths.get(styleSheet).getFileName().toString());
 		
 		for (Session session : sessions) {
 			counter++;
@@ -279,6 +278,10 @@ public class HtmlGenerator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		File parent = new File(file.getParent());
+		if (parent.isDirectory() && parent.list().length==0) {
+			parent.delete();
+		}
 	}
 	
 	private void delete(File file) throws IOException {
@@ -329,41 +332,5 @@ public class HtmlGenerator {
 			}
 		}
 	}
-	
-	public static void main(String [] args) throws IOException {
-		Parser parser = new Parser();
-		
-		if (args.length == 0) {
-			System.out.println("Please run this program with the file name as the first parameter.");
-			System.exit(0);
-		}
-		
-		FileInputStream file = null;
-		
-		try {
-			file = new FileInputStream(args[0]);
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found!");
-			System.exit(0);
-		}
-		
-		Document doc = null;
-		
-		try {
-			doc = Jsoup.parse(file, null, "");
-		} catch (IOException e) {
-			System.out.println("Parse failed.");
-			System.exit(0);
-		}
-		
-		Log log = parser.parse(doc, "VXM");
-		
-		HtmlGenerator generator = new HtmlGenerator();
-		
-		generator.generate(log, "style.css");
-		generator.zip(new File("output.zip"), "output/VXM");
-		generator.deleteTempDir("output/VXM");
-		
-		//System.out.println(generator.generateSession(log.getSessions().get(3)));
-	}
+
 }

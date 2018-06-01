@@ -1,7 +1,5 @@
 package app;
 
-import java.io.FileInputStream;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,9 +16,8 @@ public class App extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		FileInputStream file = new FileInputStream("res/main 0.01.fxml");
-		Parent root = loader.load(file);
+		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/app/res/main 0.01.fxml"));
+		Parent root = loader.load();
 		controller = loader.getController();
 		
 		controller.setStage(stage);
