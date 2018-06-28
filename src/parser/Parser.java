@@ -35,7 +35,7 @@ public class Parser {
 		int hour;
 		int minutes;
 		Month month;
-		
+		System.out.print(timestamp);
 		if (timestamp.length() > 7) {
 			String noComma = timestamp.replaceAll(",", "");
 			String[] strings = noComma.split(" ");
@@ -43,7 +43,7 @@ public class Parser {
 			day = Integer.parseInt(strings[1]);
 			year = Integer.parseInt(strings[2]);
 			hour = Integer.parseInt(strings[3].split(":")[0]);
-			if (strings[3].indexOf("PM") >= 0)
+			if (strings[3].indexOf("PM") >= 0 && hour != 12)
 				hour += 12;
 			else if (hour==12)
 				hour -= 12;
@@ -55,7 +55,8 @@ public class Parser {
 			
 			hour = Integer.parseInt(timestamp.split(":")[0]);
 			if (timestamp.indexOf("PM") >= 0){
-				hour += 12;
+				if (hour != 12) 
+					hour += 12;
 			} else {
 				if (previous.getHour() >= 12){
 					day++;
@@ -66,7 +67,7 @@ public class Parser {
 			}
 			minutes = Integer.parseInt(timestamp.split(":")[1].substring(0, 2));
 		}
-
+		System.out.println(": " + year + " " + month + " " + day + " " + hour + " " + minutes);
 		return LocalDateTime.of(year, month, day, hour, minutes);
 	}
 	

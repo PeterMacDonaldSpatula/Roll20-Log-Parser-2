@@ -133,8 +133,8 @@ public class HtmlGenerator {
 	private String getImagePath(String avatar) {
 		if (avatar == null)
 			return null;
-				
-		return avatar.substring(0, avatar.indexOf('/'));
+		System.out.println(avatar + " " + avatar.substring(0, avatar.lastIndexOf('/')));
+		return avatar.substring(0, avatar.lastIndexOf('/'));
 	}
 	
 	private void moveImages(Log log, File selectedFile) throws IOException {
