@@ -1,0 +1,170 @@
+body {
+	background-color: #e6e6e6;
+}
+img {
+	height: 70px;
+}
+div.message {
+	border-top: 3px solid #8c8c8c;
+	padding: 15px 10px;
+	overflow: auto;
+}
+div.avatar {
+	float: left;
+	padding: 0px 10px;
+}
+div.emote {
+	background-color: #ffcc33;
+	color: #804d00;
+	text-align: center;
+	font-weight: bold;
+	font-style: italic;
+	font-size: larger;
+}
+div.desc {
+	text-align: center;
+	font-size:larger;
+	font-weight: bold;
+	font-style: italic;
+}
+div.spacer {
+	display: none;
+}
+span.speaker {
+	font-weight:bold;
+}
+span.inlinerollresult {
+	background-color: #ffdf80;
+	font-weight:bold;
+	padding: 2px;
+	line-height: 200%
+}
+span.fullcrit {
+	border: 2px solid green;
+}
+span.fullfail {
+	border: 2px solid darkred;
+}
+div.formula {
+	display: inline;
+
+	padding: 4px;
+
+	background: white;
+
+	border-radius: 3px;
+
+	border: 1px solid #D1D1D1;
+
+	font-size: 1.1em;
+
+	line-height: 2.0em;
+
+	word-wrap: break-word;
+}
+div.formattedformula {
+	display: block;
+
+	float: left;
+
+	padding: 0 4px 0 4px;
+
+	margin: 5px 0 5px 0;
+}
+div.clear {
+	clear: both;
+}
+div.dicegrouping {
+	display: inline;
+}
+div.diceroll {
+	display: inline-block;
+
+font-size: 1.2em;
+}
+div.dicon {
+	display: inline-block;
+
+	min-width: 30px;
+
+	text-align: center;
+
+	position: relative;
+}
+div.didroll {
+	text-shadow: -1px -1px 1px #FFF,1px -1px 1px #FFF,-1px 1px 1px #FFF,1px 1px 1px #FFF;
+
+	z-index: 2;
+
+	position: relative;
+
+	color: black;
+
+	height: auto;
+
+	min-height: 29px;
+
+	margin-top: -3px;
+
+	top: 0;
+
+	text-align: center;
+}
+div.backing {
+	position: absolute;
+
+	top: -2px;
+
+	left: 0;
+
+	width: 100%;
+
+	text-align: center;
+
+	font-size: 30px;
+
+	color: #8FB1D9;
+
+	text-shadow: 0 0 3px #8FB1D9;
+
+	opacity: .75;
+
+	pointer-events: none;
+
+	z-index: 1;
+}
+div.rolled {
+	cursor: move;
+
+	font-weight: bold;
+
+	color: black;
+
+	font-size: 1.4em;
+	
+	display: inline;
+
+	padding: 4px;
+
+	background: white;
+
+	border-radius: 3px;
+
+	border: 1px solid #D1D1D1;
+
+	font-size: 1.1em;
+
+	line-height: 2.0em;
+
+	word-wrap: break-word;
+}
+div.critfail {
+	color: #730505;
+
+	font-weight: bold;
+}
+div.critsuccess {
+	color: green;
+
+	font-weight: bold;
+}
