@@ -35,7 +35,7 @@ public class Parser {
 		int hour;
 		int minutes;
 		Month month;
-		System.out.print(timestamp);
+		
 		if (timestamp.length() > 7) {
 			String noComma = timestamp.replaceAll(",", "");
 			String[] strings = noComma.split(" ");
@@ -67,7 +67,6 @@ public class Parser {
 			}
 			minutes = Integer.parseInt(timestamp.split(":")[1].substring(0, 2));
 		}
-		System.out.println(": " + year + " " + month + " " + day + " " + hour + " " + minutes);
 		return LocalDateTime.of(year, month, day, hour, minutes);
 	}
 	
@@ -139,6 +138,7 @@ public class Parser {
 				workingMessage.addLine(text);
 				addMessageToSession(workingMessage, lastMessageTime);
 				workingMessage = null;
+				continue;
 			}
 			
 			if (message.hasClass("desc")) {
@@ -152,6 +152,7 @@ public class Parser {
 				workingMessage.addLine(text);
 				addMessageToSession(workingMessage, lastMessageTime);
 				workingMessage = null;
+				continue;
 			}
 			
 			text = message.html();
@@ -163,6 +164,11 @@ public class Parser {
 				}
 					
 				workingMessage = new Message(by, avatar, tstamp);
+			} else if (by == null && tstamp == null && workingMessage == null) {
+				workingMessage = new Message(null, null, lastMessageTime);
+				workingMessage.addLine(text);
+				addMessageToSession(workingMessage, lastMessageTime);
+				workingMessage = null;
 			}
 			
 			if(workingMessage != null) {
@@ -173,6 +179,7 @@ public class Parser {
 				previous = tstamp;
 			}
 		}
+		
 		addMessageToSession(workingMessage, lastMessageTime);
 		nextSession(workingMessage.getTimestamp().toLocalDate());
 		

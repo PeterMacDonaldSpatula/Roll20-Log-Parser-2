@@ -76,17 +76,16 @@ public class HtmlGenerator {
 	private String generateNormalMessage(Message message) {
 		String output;
 		
-		if (message.getAvatarAddress().isEmpty()) {
-			output = 
-					"<div class=\"message normal\">\n"
-							+ "<span class=\"speaker\">" + message.getSpeaker() + ":</span>";
-		} else {
-			output = 
-					"<div class=\"message normal\">\n"
-							+ "<div class=\"avatar\">\n"
-								+ "<img src=\"" + message.getAvatarAddress() + "\">\n"
-							+ "</div>"
-							+ "<span class=\"speaker\">" + message.getSpeaker() + ":</span>";
+		output = "<div class=\"message normal\">\n";
+		if (message.getAvatarAddress() != null && message.getAvatarAddress().isEmpty()) {
+			output += 
+					"<span class=\"speaker\">" + message.getSpeaker() + ":</span>";
+		} else if (message.getAvatarAddress() != null){
+			output += 
+					"<div class=\"avatar\">\n"
+						+ "<img src=\"" + message.getAvatarAddress() + "\">\n"
+					+ "</div>"
+					+ "<span class=\"speaker\">" + message.getSpeaker() + ":</span>";
 		}
 
 		List<String> messageText = message.getMessages();
